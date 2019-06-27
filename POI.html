@@ -48,9 +48,9 @@
 			"esri/core/lang",
 			"esri/core/promiseUtils",
 			"esri/core/watchUtils",
-            "dojo/domReady!", "POI.html/../js/sdk/arcgis3.20"
-        ], function(FeatureLayer, Map, MapView, Legend, ImageryLayer, BasemapToggle,
-                    Expand, lang, promiseUtils, watchUtils, mod1, esri){
+            "dojo/domReady!"
+        ], function(FeatureLayer, Map, MapView, Legend, ImageryLayer, BasemapToggle, 
+					Expand, lang, promiseUtils, watchUtils){
 					
 			let totalNumber;
 			let highlightHandle = null;
@@ -88,16 +88,15 @@
 			
 			
 			//图层些
-            var template = new esri.InfoTemplate("Info", "${Name}");
+			
 			var POI_URL = "http://106.14.222.88:6080/arcgis/rest/services/上海v1_2/MapServer/61";
             var POI_FeatureLayer = new 
 				FeatureLayer({
-				url: POI_URL,
-                popupTemplate: template
+				url: POI_URL
 				});						
 			
 			
-			map.add(POI_FeatureLayer);
+			map.add(POI_FeatureLayer);	
 			
 
 		});	
