@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>上海市文化产业布局现状与分析-GIS导论小组</title>
+    <!-- Bootstrap core CSS-->
+    <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Custom fonts for this template-->
+    <link href="vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <!-- Custom styles for this template-->
+    <link href="css/sb-admin.css" rel="stylesheet">
+	<!-- WebGL rendering in 2D -->
+
+</head>
+
+<body class="fixed-nav sticky-footer bg-dark" id="page-top">
+<!-- Navigation-->
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top" id="mainNav">
+    <a class="navbar-brand" href="index.html">上海市文化产业布局现状与分析</a>
+    <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarResponsive">
+        <ul class="navbar-nav navbar-sidenav" id="exampleAccordion">
+            <li class="nav-item" data-toggle="tooltip" data-placement="right" title="简单地图表述">
+                <a class="nav-link nav-link-collapse collapsed" data-toggle="collapse" href="#collapseMulti" data-parent="#exampleAccordion">
+                    <i class="fa fa-fw fa-sitemap"></i>
+                    <span class="nav-link-text">简单地图表述</span>
+                </a>
+                <ul class="sidenav-second-level collapse" id="collapseMulti">
+                    <li>
+                        <a href="POI.html">全市分布图</a>
+                    </li>
+                    <li>
+                        <a href="heatmap.html">全市热力图</a>
+                    </li>
+                    <li>
+                        <a href="district.html">各区县占比图</a>
+                    </li>
+                    <li>
+                        <a href="POIcharts.html">统计图表</a>
+                    </li>
+                </ul>
+            </li>
+            <li class="nav-item" data-toggle="tooltip" data-placement="right" title="文化产业布局分析">
+                <a class="nav-link nav-link-collapse collapsed" data-toggle="collapse" href="#collapse" data-parent="#exampleAccordion">
+                    <i class="fa fa-fw fa-area-chart"></i>
+                    <span class="nav-link-text">文化产业布局分析</span>
+                </a>
+                <ul class="sidenav-second-level collapse" id="collapse">
+                    <li>
+                        <a href="yangpu_jiading.html">杨浦与嘉定的比较</a>
+                    </li>
+                    <li>
+                        <a href="history.html">历史因素分析--杨浦与黄浦的比较</a>
+                    </li>
+                    <li>
+                        <a href="history_model.html">历史因素回归模型</a>
+                    </li>
+                </ul>
+            </li>
+            <li class="nav-item" data-toggle="tooltip" data-placement="right" title="空间分布分析">
+                <a class="nav-link nav-link-collapse collapsed" data-toggle="collapse" href="#collapse2" data-parent="#exampleAccordion">
+                    <i class="fa fa-fw fa-area-chart"></i>
+                    <span class="nav-link-text">空间分布分析</span>
+                </a>
+                <ul class="sidenav-second-level collapse" id="collapse2">
+                    <li>
+                        <a href="circles.html">环线分析</a>
+                    </li>
+                    <li>
+                        <a href="distance.html">直线与实际距离分析</a>
+                    </li>
+                    <li>
+                        <a href="relations.html">与其他产业的关系</a>
+                    </li>
+                </ul>
+            </li>
+            <li class="nav-item" data-toggle="tooltip" data-placement="right" title="文创中心">
+                <a class="nav-link nav-link-collapse collapsed" data-toggle="collapse" href="#collapseCenter" data-parent="#exampleAccordion">
+                    <i class="fa fa-fw fa-sitemap"></i>
+                    <span class="nav-link-text">文创中心</span>
+                </a>
+                <ul class="sidenav-second-level collapse" id="collapseCenter">
+                    <li>
+                        <a href="hotspot.html">热点分析</a>
+                    </li>
+                    <li>
+                        <a href="commute.html">通勤路线</a>
+                    </li>
+                    <li>
+                        <a href="huffmodel.html">HUFF模型</a>
+                    </li>
+                </ul>
+            </li>
+            <li class="nav-item" data-toggle="tooltip" data-placement="right" title="环同济经济圈">
+                <a class="nav-link nav-link-collapse collapsed" data-toggle="collapse" href="#collapseComponents" data-parent="#exampleAccordion">
+                    <i class="fa fa-fw fa-wrench"></i>
+                    <span class="nav-link-text">环同济经济圈</span>
+                </a>
+                <ul class="sidenav-second-level collapse" id="collapseComponents">
+                    <li>
+                        <a href="tongjiPOI.html">环同济POI分布与重新布局</a>
+                    </li>
+                    <li>
+                        <a href="tongjicharts.html">统计图表</a>
+                    </li>
+                </ul>
+            </li>
+            <li class="nav-item" data-toggle="tooltip" data-placement="right" title="More">
+                <a class="nav-link" href="#">
+                    <i class="fa fa-fw fa-link"></i>
+                    <span class="nav-link-text">More</span>
+                </a>
+            </li>
+        </ul>
+        <ul class="navbar-nav sidenav-toggler">
+            <li class="nav-item">
+                <a class="nav-link text-center" id="sidenavToggler">
+                    <i class="fa fa-fw fa-angle-left"></i>
+                </a>
+            </li>
+        </ul>
+    </div>
+</nav>
+<div class="content-wrapper">
+    <div class="container-fluid">
+        <!-- Breadcrumbs-->
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a href="#">主页</a>
+            </li>
+			<li class="breadcrumb-item">
+                <a href="#">空间分布分析</a>
+            </li>
+            <li class="breadcrumb-item active">与其他产业的关系</li>
+        </ol>
+        <div class="row">
+            <div class="col-12" style="max-width: 90%; padding-left: 5%;">
+                <h1>与其他产业的关系</h1>
+                <p>针对文化创意产业与其他类型POI的关系，我们建立了与每个之间的皮尔森系数来分析它们
+                    之间的相关性。</p>
+                <img src="img/pearson.png" style="max-width: 100%"/>
+                <p>皮尔森系数在0.95以上的表示它们对文化产业的分布具有较大影响，分别为住宿、运动、零售业、交通运输、农牧水利、教育培训、医疗卫生、休闲娱乐、汽车/摩托、旅游服务。其中与住 宿的相关性最高，首先这与上海市住宿产业本身体量大、分布广的特点有关;其次人力资源是任 何产业的基础，而住宿问题可以说是人力资源比较关键的一个方面，尤其对于上海这种外来人力 资源较为庞大的城市，并且文化产业对人力的需求并不算较低的水平，所以住宿必然会较大影响 到文化产业的布局。</p>
+
+            </div>
+        </div>
+    </div>
+    <!-- /.container-fluid-->
+    <!-- /.content-wrapper-->
+    <footer class="sticky-footer">
+        <div class="container">
+            <div class="text-center">
+                <small>Copyright © GIS小组 2018</small>
+            </div>
+        </div>
+    </footer>
+    <!-- Scroll to Top Button-->
+    <a class="scroll-to-top rounded" href="#page-top">
+        <i class="fa fa-angle-up"></i>
+    </a>
+    <!-- Bootstrap core JavaScript-->
+    <script src="vendor/jquery/jquery.min.js"></script>
+    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <!-- Core plugin JavaScript-->
+    <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
+    <!-- Custom scripts for all pages-->
+    <script src="js/sb-admin.min.js"></script>
+</div>
+</body>
+
+</html>

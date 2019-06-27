@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="">
+  <meta name="author" content="">
+  <title>上海市文化产业布局现状与分析-GIS导论小组</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"></script>
+  <!-- Bootstrap core CSS-->
+  <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Custom fonts for this template-->
+  <link href="vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+  <!-- Custom styles for this template-->
+  <link href="css/sb-admin.css" rel="stylesheet">
+</head>
+
+<body class="fixed-nav sticky-footer bg-dark" id="page-top">
+<!-- Navigation-->
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top" id="mainNav">
+  <a class="navbar-brand" href="index.html">上海市文化产业布局现状与分析</a>
+  <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navbarResponsive">
+    <ul class="navbar-nav navbar-sidenav" id="exampleAccordion">
+      <li class="nav-item" data-toggle="tooltip" data-placement="right" title="简单地图表述">
+        <a class="nav-link nav-link-collapse collapsed" data-toggle="collapse" href="#collapseMulti" data-parent="#exampleAccordion">
+          <i class="fa fa-fw fa-sitemap"></i>
+          <span class="nav-link-text">简单地图表述</span>
+        </a>
+        <ul class="sidenav-second-level collapse" id="collapseMulti">
+          <li>
+            <a href="POI.html">全市分布图</a>
+          </li>
+          <li>
+            <a href="heatmap.html">全市热力图</a>
+          </li>
+          <li>
+            <a href="district.html">各区县占比图</a>
+          </li>
+          <li>
+            <a href="POIcharts.html">统计图表</a>
+          </li>
+        </ul>
+      </li>
+      <li class="nav-item" data-toggle="tooltip" data-placement="right" title="文化产业布局分析">
+        <a class="nav-link nav-link-collapse collapsed" data-toggle="collapse" href="#collapse" data-parent="#exampleAccordion">
+          <i class="fa fa-fw fa-area-chart"></i>
+          <span class="nav-link-text">文化产业布局分析</span>
+        </a>
+        <ul class="sidenav-second-level collapse" id="collapse">
+          <li>
+            <a href="yangpu_jiading.html">杨浦与嘉定的比较</a>
+          </li>
+          <li>
+            <a href="history.html">历史因素分析--杨浦与黄浦的比较</a>
+          </li>
+          <li>
+            <a href="history_model.html">历史因素回归模型</a>
+          </li>
+        </ul>
+      </li>
+      <li class="nav-item" data-toggle="tooltip" data-placement="right" title="空间分布分析">
+        <a class="nav-link nav-link-collapse collapsed" data-toggle="collapse" href="#collapse2" data-parent="#exampleAccordion">
+          <i class="fa fa-fw fa-area-chart"></i>
+          <span class="nav-link-text">空间分布分析</span>
+        </a>
+        <ul class="sidenav-second-level collapse" id="collapse2">
+          <li>
+            <a href="circles.html">环线分析</a>
+          </li>
+          <li>
+            <a href="distance.html">直线与实际距离分析</a>
+          </li>
+          <li>
+            <a href="relations.html">与其他产业的关系</a>
+          </li>
+        </ul>
+      </li>
+      <li class="nav-item" data-toggle="tooltip" data-placement="right" title="文创中心">
+        <a class="nav-link nav-link-collapse collapsed" data-toggle="collapse" href="#collapseCenter" data-parent="#exampleAccordion">
+          <i class="fa fa-fw fa-sitemap"></i>
+          <span class="nav-link-text">文创中心</span>
+        </a>
+        <ul class="sidenav-second-level collapse" id="collapseCenter">
+          <li>
+            <a href="hotspot.html">热点分析</a>
+          </li>
+          <li>
+            <a href="commute.html">通勤路线</a>
+          </li>
+          <li>
+            <a href="huffmodel.html">HUFF模型</a>
+          </li>
+        </ul>
+      </li>
+      <li class="nav-item" data-toggle="tooltip" data-placement="right" title="环同济经济圈">
+        <a class="nav-link nav-link-collapse collapsed" data-toggle="collapse" href="#collapseComponents" data-parent="#exampleAccordion">
+          <i class="fa fa-fw fa-wrench"></i>
+          <span class="nav-link-text">环同济经济圈</span>
+        </a>
+        <ul class="sidenav-second-level collapse" id="collapseComponents">
+          <li>
+            <a href="tongjiPOI.html">环同济POI分布与重新布局</a>
+          </li>
+          <li>
+            <a href="tongjicharts.html">统计图表</a>
+          </li>
+        </ul>
+      </li>
+      <li class="nav-item" data-toggle="tooltip" data-placement="right" title="More">
+        <a class="nav-link" href="#">
+          <i class="fa fa-fw fa-link"></i>
+          <span class="nav-link-text">More</span>
+        </a>
+      </li>
+    </ul>
+    <ul class="navbar-nav sidenav-toggler">
+      <li class="nav-item">
+        <a class="nav-link text-center" id="sidenavToggler">
+          <i class="fa fa-fw fa-angle-left"></i>
+        </a>
+      </li>
+    </ul>
+  </div>
+</nav>
+  <div class="content-wrapper">
+    <div class="container-fluid">
+      <!-- Breadcrumbs-->
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+          <a href="#">主页</a>
+        </li>
+        <li class="breadcrumb-item">
+          <a href="#">环同济经济圈</a>
+        </li>
+        <li class="breadcrumb-item active">统计图表</li>
+      </ol>
+      <!-- Area Chart Example-->
+      <div class="card mb-3">
+        <div class="card-header">
+          <i class="fa fa-bar-chart"></i>环同济经济圈产值</div>
+        <div class="card-body">
+          <canvas id="myBarChart" width="100" height="50"></canvas>
+        </div>
+        <div class="card-footer small text-muted">Updated yesterday at 11:59 PM</div>
+      </div>
+
+      <div class="row">
+        <div class="col-lg-6">
+          <!-- Example Bar Chart Card-->
+          <div class="card mb-3">
+            <div class="card-header">
+              <i class="fa fa-pie-chart"></i>核心圈词频分析POI占比</div>
+            <div class="card-body">
+              <canvas id="PieChart1" width="100%" height="100"></canvas>
+            </div>
+            <div class="card-footer small text-muted">Updated yesterday at 11:59 PM</div>
+          </div>
+        </div>
+        <div class="col-lg-6">
+          <!-- Example Pie Chart Card-->
+          <div class="card mb-3">
+            <div class="card-header">
+              <i class="fa fa-pie-chart"></i>扩展圈词频分析POI占比</div>
+            <div class="card-body">
+              <canvas id="PieChart2" width="100%" height="100"></canvas>
+            </div>
+            <div class="card-footer small text-muted">Updated yesterday at 11:59 PM</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- /.container-fluid-->
+    <!-- /.content-wrapper-->
+    <footer class="sticky-footer">
+      <div class="container">
+        <div class="text-center">
+          <small>Copyright © GIS小组 2018</small>
+        </div>
+      </div>
+    </footer>
+    <!-- Scroll to Top Button-->
+    <a class="scroll-to-top rounded" href="#page-top">
+      <i class="fa fa-angle-up"></i>
+    </a>
+    <script>
+        var ctx = document.getElementById("myBarChart");
+        var myLineChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: ["2002", "2007", "2008", "2009", "2010", "2011", "2017"],
+                datasets: [{
+                    label: "Revenue",
+                    backgroundColor: "rgba(2,117,216,1)",
+                    borderColor: "rgba(2,117,216,1)",
+                    data: [10, 79.8, 93.5, 123, 150, 180, 368],
+                }],
+            },
+            options: {
+                scales: {
+                    xAxes: [{
+                        time: {
+                            unit: 'Year'
+                        },
+                        gridLines: {
+                            display: false
+                        },
+                        ticks: {
+                            maxTicksLimit: 6
+                        }
+                    }],
+                    yAxes: [{
+                        ticks: {
+                            min: 0,
+                            max: 400,
+                            maxTicksLimit: 5
+                        },
+                        gridLines: {
+                            display: true
+                        }
+                    }],
+                },
+                legend: {
+                    display: false
+                }
+            }
+        });
+
+        var ctx = document.getElementById("PieChart2").getContext('2d');
+        var PAChartData = {
+            // x轴的标示
+            labels : ['高新技术','设计院、事务所','咨询和调查','科研机构','文化艺术团体','书店','书刊销售','广播影视','文化活动场所','会展、布展','图书馆','设计机构','监督检测、认证','报社','广告策划、设计、制作','会展中心','其他'],
+            // 数据，数组中的每一个object代表一条线
+            datasets : [{
+                data: [507,208,204,106,58,57,45,44,39,16,14,14,13,13,7,6,39],
+                backgroundColor: ['yellow','aqua','lime','red','blue','green','orange','gray','lightblue','navy','crimson','indigo','gold','lightsteelblue','maroon','lightsalmon','tan'],
+                borderWidth:0,
+            }],
+        };
+        var myPAChart = new Chart(ctx, {
+            type: 'pie',
+            data: PAChartData,
+            options: Chart.defaults.global.defaultFontColor = 'black',
+            options: {
+                responsive: true,
+            }
+        });
+
+        var ctx = document.getElementById("PieChart1").getContext('2d');
+        var PAChartData = {
+            // x轴的标示
+            labels : ['设计院、事务所','高新技术','科研机构','咨询和调查','书店','文化艺术团体','文化活动场所','广播影视','书刊销售','设计机构','报社','其他'],
+            // 数据，数组中的每一个object代表一条线
+            datasets : [{
+                data: [142, 131, 66, 57, 23, 18, 15, 13, 12, 9, 8, 28],
+                backgroundColor: ['yellow','aqua','lime','red','blue','green','orange','gray','lightblue','navy','crimson','indigo'],
+                borderWidth:0,
+            }],
+        };
+        var myPAChart = new Chart(ctx, {
+            type: 'pie',
+            data: PAChartData,
+            options: Chart.defaults.global.defaultFontColor = 'black',
+            options: {
+                responsive: true,
+            }
+        });
+    </script>
+    <!-- Bootstrap core JavaScript-->
+    <script src="vendor/jquery/jquery.min.js"></script>
+    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <!-- Core plugin JavaScript-->
+    <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
+    <!-- Page level plugin JavaScript-->
+    <script src="vendor/chart.js/Chart.min.js"></script>
+    <!-- Custom scripts for all pages-->
+    <script src="js/sb-admin.min.js"></script>
+  </div>
+</body>
+
+</html>

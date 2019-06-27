@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>上海市文化产业布局现状与分析-GIS导论小组</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"></script>
+    <!-- Bootstrap core CSS-->
+    <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Custom fonts for this template-->
+    <link href="vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <!-- Custom styles for this template-->
+    <link href="css/sb-admin.css" rel="stylesheet">
+	<!-- WebGL rendering in 2D -->
+	<script>
+	var dojoConfig = {
+    has: {
+      "esri-featurelayer-webgl": 1
+		}
+	};
+	</script>
+	<!-- arcgis线上调用 -->
+    <link rel="stylesheet" href="https://js.arcgis.com/4.7/esri/css/main.css">
+    <script src="https://js.arcgis.com/4.7/"></script>
+	<style>    
+	  #title {
+      padding: 15px;
+      max-width: 500px;
+      }
+	  #totalNumber {
+      color: #ed5050;
+      font-size: 36pt;
+      font-weight: bolder;
+    }
+	</style>
+    <script>
+        require([
+			"esri/layers/FeatureLayer",
+            "esri/Map",
+            "esri/views/MapView",
+			"esri/widgets/Legend",
+			"esri/layers/ImageryLayer",
+			"esri/widgets/BasemapToggle",
+			"esri/widgets/Expand",
+			"esri/core/lang",
+			"esri/core/promiseUtils",
+			"esri/core/watchUtils",
+            "dojo/domReady!"
+        ], function(FeatureLayer, Map, MapView, Legend, ImageryLayer, BasemapToggle, 
+					Expand, lang, promiseUtils, watchUtils){
+					
+			let totalNumber;
+			let highlightHandle = null;
+			
+            var map = new Map({
+                basemap: "topo"
+            });
+            var view = new MapView({
+                container: "viewDiv",  // Reference to the scene div created in step 5
+                map: map,  // Reference to the map object created before the scene
+                zoom: 11,  // Sets zoom level based on level of detail (LOD)
+                center: [121.48, 31.23]  // Sets center point of view using longitude,latitude
+            
+			});
+            
+			//UI
+			//右上信息栏
+			view.ui.add("title", "top-right");
+			//图例
+			view.ui.add(new Legend({
+			view: view,
+			style: "classic"
+			}), "bottom-left");
+			
+			//底图切换选项
+			// 1 - Create the widget
+			var toggle = new BasemapToggle({
+				// 2 - Set properties
+				view: view, // view that provides access to the map's 'topo' basemap
+				nextBasemap: "hybrid" // allows for toggling to the 'hybrid' basemap
+			});
+			
+			// Add widget to the top right corner of the view
+			view.ui.add(toggle, "top-right");
+			
+			
+			//图层些
+            var featureLayer1 = new FeatureLayer({
+                url: "https://10.60.42.201:6442/arcgis/rest/services/Du/环线分布/MapServer/1",
+                opacity: 0.6
+            });
+            var featureLayer2 = new FeatureLayer({
+                url: "https://10.60.42.201:6442/arcgis/rest/services/Du/环线分布/MapServer/0",
+                opacity: 0.6
+            });
+            map.add(featureLayer1);
+            map.add(featureLayer2);
+
+
+		});	
+    </script>
+</head>
+
+<body class="fixed-nav sticky-footer bg-dark" id="page-top">
+<!-- Navigation-->
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top" id="mainNav">
+    <a class="navbar-brand" href="index.html">上海市文化产业布局现状与分析</a>
+    <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarResponsive">
+        <ul class="navbar-nav navbar-sidenav" id="exampleAccordion">
+            <li class="nav-item" data-toggle="tooltip" data-placement="right" title="简单地图表述">
+                <a class="nav-link nav-link-collapse collapsed" data-toggle="collapse" href="#collapseMulti" data-parent="#exampleAccordion">
+                    <i class="fa fa-fw fa-sitemap"></i>
+                    <span class="nav-link-text">简单地图表述</span>
+                </a>
+                <ul class="sidenav-second-level collapse" id="collapseMulti">
+                    <li>
+                        <a href="POI.html">全市分布图</a>
+                    </li>
+                    <li>
+                        <a href="heatmap.html">全市热力图</a>
+                    </li>
+                    <li>
+                        <a href="district.html">各区县占比图</a>
+                    </li>
+                    <li>
+                        <a href="POIcharts.html">统计图表</a>
+                    </li>
+                </ul>
+            </li>
+            <li class="nav-item" data-toggle="tooltip" data-placement="right" title="文化产业布局分析">
+                <a class="nav-link nav-link-collapse collapsed" data-toggle="collapse" href="#collapse" data-parent="#exampleAccordion">
+                    <i class="fa fa-fw fa-area-chart"></i>
+                    <span class="nav-link-text">文化产业布局分析</span>
+                </a>
+                <ul class="sidenav-second-level collapse" id="collapse">
+                    <li>
+                        <a href="yangpu_jiading.html">杨浦与嘉定的比较</a>
+                    </li>
+                    <li>
+                        <a href="history.html">历史因素分析--杨浦与黄浦的比较</a>
+                    </li>
+                    <li>
+                        <a href="history_model.html">历史因素回归模型</a>
+                    </li>
+                </ul>
+            </li>
+            <li class="nav-item" data-toggle="tooltip" data-placement="right" title="空间分布分析">
+                <a class="nav-link nav-link-collapse collapsed" data-toggle="collapse" href="#collapse2" data-parent="#exampleAccordion">
+                    <i class="fa fa-fw fa-area-chart"></i>
+                    <span class="nav-link-text">空间分布分析</span>
+                </a>
+                <ul class="sidenav-second-level collapse" id="collapse2">
+                    <li>
+                        <a href="circles.html">环线分析</a>
+                    </li>
+                    <li>
+                        <a href="distance.html">直线与实际距离分析</a>
+                    </li>
+                    <li>
+                        <a href="relations.html">与其他产业的关系</a>
+                    </li>
+                </ul>
+            </li>
+            <li class="nav-item" data-toggle="tooltip" data-placement="right" title="文创中心">
+                <a class="nav-link nav-link-collapse collapsed" data-toggle="collapse" href="#collapseCenter" data-parent="#exampleAccordion">
+                    <i class="fa fa-fw fa-sitemap"></i>
+                    <span class="nav-link-text">文创中心</span>
+                </a>
+                <ul class="sidenav-second-level collapse" id="collapseCenter">
+                    <li>
+                        <a href="hotspot.html">热点分析</a>
+                    </li>
+                    <li>
+                        <a href="commute.html">通勤路线</a>
+                    </li>
+                    <li>
+                        <a href="huffmodel.html">HUFF模型</a>
+                    </li>
+                </ul>
+            </li>
+            <li class="nav-item" data-toggle="tooltip" data-placement="right" title="环同济经济圈">
+                <a class="nav-link nav-link-collapse collapsed" data-toggle="collapse" href="#collapseComponents" data-parent="#exampleAccordion">
+                    <i class="fa fa-fw fa-wrench"></i>
+                    <span class="nav-link-text">环同济经济圈</span>
+                </a>
+                <ul class="sidenav-second-level collapse" id="collapseComponents">
+                    <li>
+                        <a href="tongjiPOI.html">环同济POI分布与重新布局</a>
+                    </li>
+                    <li>
+                        <a href="tongjicharts.html">统计图表</a>
+                    </li>
+                </ul>
+            </li>
+            <li class="nav-item" data-toggle="tooltip" data-placement="right" title="More">
+                <a class="nav-link" href="#">
+                    <i class="fa fa-fw fa-link"></i>
+                    <span class="nav-link-text">More</span>
+                </a>
+            </li>
+        </ul>
+        <ul class="navbar-nav sidenav-toggler">
+            <li class="nav-item">
+                <a class="nav-link text-center" id="sidenavToggler">
+                    <i class="fa fa-fw fa-angle-left"></i>
+                </a>
+            </li>
+        </ul>
+    </div>
+</nav>
+<div class="content-wrapper">
+    <div class="container-fluid">
+        <!-- Breadcrumbs-->
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a href="#">主页</a>
+            </li>
+			<li class="breadcrumb-item">
+                <a href="#">总体分布</a>
+            </li>
+            <li class="breadcrumb-item active">内中外环</li>
+        </ol>
+        <div class="row">
+            <div class="col-12" style="height: 650px;">
+                <div id="viewDiv" style="width: 100%; height: 100%;"></div>
+				  <div id="title" class="esri-widget">
+					<span id="totalNumber">内中外环</span>分布一览。
+				  </div>
+			</div>
+            <div class="col-8" style="margin-top: 50px;">
+                <div class="card mb-3">
+                    <div class="card-header">
+                        <i class="fa fa-table"></i>环线创意产业统计表</div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                                <thead>
+                                  <tr>
+                                    <th>环线</th>
+                                    <th>文化创意产业企业数</th>
+                                    <th>文化创意产业比例</th>
+                                  </tr>
+                                </thead>
+                                <tbody>
+                                  <tr>
+                                      <td>内环</td>
+                                      <td>22273</td>
+                                      <td>0.420288</td>
+                                  </tr>
+                                  <tr>
+                                      <td>中环</td>
+                                      <td>11194</td>
+                                      <td>0.211571</td>
+                                  </tr>
+                                  <tr>
+                                      <td>外环</td>
+                                      <td>7088</td>
+                                      <td>0.133966</td>
+                                  </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-4" style="margin-top: 50px;">
+                <div class="card mb-3">
+                    <div class="card-header">
+                        <i class="fa fa-pie-chart"></i>环线文创产业分布图</div>
+                    <div class="card-body">
+                        <canvas id="PieChart" width="100%" height="100"></canvas>
+                    </div>
+                    <div class="card-footer small text-muted">Updated yesterday at 11:59 PM</div>
+                </div>
+            </div>
+        </div>
+        <div class="row" style="padding: 5%;">
+            <p>首先，针对上海市文化产业企业在内、中、外环的分布情况，根据上海市对于环线的划分 ( 内环 高架路 内大致为内环区，中环路划分中环区，外环高速路划分外环区，绕城高速划分郊环 区)和所给上海市文化产业的分布数据，我们得到以上图示。</p>
+            <p>然后根据图中的区域信息，对区域内文化创意产业企业数进行统计如上图表所示。</p>
+            <p>根据以上产业环区的分布图，可以看出，越靠内环区的点密集，这也表示文化产业分布越集 中;并且统计数据也显示内环的文化产业数量占比达到了将近一半的水平。因此，我们认为以内 环区相对中心位置的上海市人民广场为中心点的话，文化产业的分布与直线距离是有较大关系的 ，后面是我们的回归模型分析过程。</p>
+        </div>
+    </div>
+    <!-- /.container-fluid-->
+    <!-- /.content-wrapper-->
+    <footer class="sticky-footer">
+        <div class="container">
+            <div class="text-center">
+                <small>Copyright © GIS小组 2018</small>
+            </div>
+        </div>
+    </footer>
+    <!-- Scroll to Top Button-->
+    <a class="scroll-to-top rounded" href="#page-top">
+        <i class="fa fa-angle-up"></i>
+    </a>
+    <script>
+        var ctx = document.getElementById("PieChart").getContext('2d');
+        var PAChartData = {
+            // x轴的标示
+            labels : ['内环','中环','外环'],
+            // 数据，数组中的每一个object代表一条线
+            datasets : [{
+                data: [0.55, 0.28, 0.17],
+                backgroundColor: ['yellow','aqua','lime'],
+                borderWidth:0,
+            }],
+        };
+        var myPAChart = new Chart(ctx, {
+            type: 'pie',
+            data: PAChartData,
+            options: Chart.defaults.global.defaultFontColor = 'black',
+            options: {
+                responsive: true,
+            }
+        });
+    </script>
+    <!-- Bootstrap core JavaScript-->
+    <script src="vendor/jquery/jquery.min.js"></script>
+    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <!-- Core plugin JavaScript-->
+    <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
+    <!-- Page level plugin JavaScript-->
+    <script src="vendor/chart.js/Chart.min.js"></script>
+    <!-- Custom scripts for all pages-->
+    <script src="js/sb-admin.min.js"></script>
+</div>
+</body>
+
+</html>
