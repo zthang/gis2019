@@ -14,46 +14,50 @@
     <link href="vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
     <!-- Custom styles for this template-->
     <link href="css/sb-admin.css" rel="stylesheet">
-	<!-- WebGL rendering in 2D -->
-	<script>
-	var dojoConfig = {
-    has: {
-      "esri-featurelayer-webgl": 1
-		}
-	};
-	</script>
-	<!-- arcgis线上调用 -->
+    <!-- WebGL rendering in 2D -->
+    <script>
+        var dojoConfig = {
+            has: {
+                "esri-featurelayer-webgl": 1
+            }
+        };
+    </script>
+    <!-- arcgis线上调用 -->
     <link rel="stylesheet" href="https://js.arcgis.com/4.7/esri/css/main.css">
     <script src="https://js.arcgis.com/4.7/"></script>
-	<style>
-	  #title {
-      padding: 15px;
-      max-width: 500px;
-      }
-	  #totalNumber {
-      color: #ed5050;
-      font-size: 36pt;
-      font-weight: bolder;
-    }
-	</style>
+    <style>
+        #title {
+            padding: 15px;
+            max-width: 500px;
+        }
+        #totalNumber {
+            color: #ed5050;
+            font-size: 36pt;
+            font-weight: bolder;
+        }
+    </style>
     <script>
         require([
-			"esri/layers/FeatureLayer",
+            "esri/layers/FeatureLayer",
             "esri/Map",
             "esri/views/MapView",
-			"esri/widgets/Legend",
-			"esri/layers/ImageryLayer",
-			"esri/widgets/BasemapToggle",
-			"esri/widgets/Expand",
-			"esri/core/lang",
-			"esri/core/promiseUtils",
-			"esri/core/watchUtils",
-            "dojo/domReady!"
+            "esri/widgets/Legend",
+            "esri/layers/ImageryLayer",
+            "esri/widgets/BasemapToggle",
+            "esri/widgets/Expand",
+            "esri/core/lang",
+            "esri/core/promiseUtils",
+            "esri/core/watchUtils",
+            "dojo/dom",
+            "dojo/on",
+            "dojo/query",
+            "dojo/domReady!",
+            "dojo"
         ], function(FeatureLayer, Map, MapView, Legend, ImageryLayer, BasemapToggle,
-					Expand, lang, promiseUtils, watchUtils){
+                    Expand, lang, promiseUtils, watchUtils, mod1, dom, on, query, dojo){
 
-			let totalNumber;
-			let highlightHandle = null;
+            let totalNumber;
+            let highlightHandle = null;
 
             var map = new Map({
                 basemap: "topo"
@@ -64,125 +68,92 @@
                 zoom: 11,  // Sets zoom level based on level of detail (LOD)
                 center: [121.48, 31.23]  // Sets center point of view using longitude,latitude
 
-			});
+            });
 
-			//UI
-			//右上信息栏
-			view.ui.add("title", "top-right");
-			//图例
-			view.ui.add(new Legend({
-			view: view,
-			style: "classic"
-			}), "bottom-left");
+            //UI
+            //右上信息栏
+            view.ui.add("title", "top-right");
+            //图例
+            view.ui.add(new Legend({
+                view: view,
+                style: "classic"
+            }), "bottom-left");
 
-			//底图切换选项
-			// 1 - Create the widget
-			var toggle = new BasemapToggle({
-				// 2 - Set properties
-				view: view, // view that provides access to the map's 'topo' basemap
-				nextBasemap: "hybrid" // allows for toggling to the 'hybrid' basemap
-			});
+            //底图切换选项
+            // 1 - Create the widget
+            var toggle = new BasemapToggle({
+                // 2 - Set properties
+                view: view, // view that provides access to the map's 'topo' basemap
+                nextBasemap: "hybrid" // allows for toggling to the 'hybrid' basemap
+            });
 
-			// Add widget to the top right corner of the view
-			view.ui.add(toggle, "top-right");
+            // Add widget to the top right corner of the view
+            view.ui.add(toggle, "top-right");
 
 
-			//图层些
-			var URL1 = "http://106.14.222.88:6080/arcgis/rest/services/TongjiCore_LW/MapServer/9";
-            var FeatureLayer1 = new
-            FeatureLayer({
+            //图层些
+            let URL1 = "http://106.14.222.88:6080/arcgis/rest/services/TongjiCore_LW/MapServer/1";
+            let feature1 = new FeatureLayer({
                 url: URL1
             });
-            var URL2 = "http://106.14.222.88:6080/arcgis/rest/services/TongjiCore_LW/MapServer/10";
-            var FeatureLayer2 = new
-            FeatureLayer({
+            feature1.opacity = 0.4;
+            // feature1.opacity = 0.0;
+            // feature1.elevationInfo = 0;
+            let URL2 = "http://106.14.222.88:6080/arcgis/rest/services/TongjiCore_LW/MapServer/2";
+            let feature2 = new FeatureLayer({
                 url: URL2
             });
-            var URL3 = "http://106.14.222.88:6080/arcgis/rest/services/TongjiCore_LW/MapServer/11";
-            var FeatureLayer3 = new
-            FeatureLayer({
+            feature2.opacity = 0.4;
+            // feature2.elevationInfo = 1;
+            let URL3 = "http://106.14.222.88:6080/arcgis/rest/services/TongjiCore_LW/MapServer/3";
+            let feature3 = new FeatureLayer({
                 url: URL3
             });
-            var URL4 = "http://106.14.222.88:6080/arcgis/rest/services/TongjiCore_LW/MapServer/12";
-            var FeatureLayer4 = new
-            FeatureLayer({
+            feature3.opacity = 0.4;
+            // feature3.elevationInfo = 2;
+            let URL4 = "http://106.14.222.88:6080/arcgis/rest/services/TongjiCore_LW/MapServer/4";
+            let feature4 = new FeatureLayer({
                 url: URL4
             });
-            var URL5 = "http://106.14.222.88:6080/arcgis/rest/services/TongjiCore_LW/MapServer/13";
-            var FeatureLayer5 = new
-            FeatureLayer({
+            feature4.opacity = 0.4;
+            // feature4.elevationInfo = 3;
+            let URL5 = "http://106.14.222.88:6080/arcgis/rest/services/TongjiCore_LW/MapServer/5";
+            let feature5 = new FeatureLayer({
                 url: URL5
             });
-            var URL6 = "http://106.14.222.88:6080/arcgis/rest/services/TongjiCore_LW/MapServer/14";
-            var FeatureLayer6 = new
-            FeatureLayer({
-                url: URL6
-            });
-            var URL7 = "http://106.14.222.88:6080/arcgis/rest/services/TongjiCore_LW/MapServer/15";
-            var FeatureLayer7 = new
-            FeatureLayer({
-                url: URL7
-            });
-            var URL8 = "http://106.14.222.88:6080/arcgis/rest/services/TongjiCore_LW/MapServer/16";
-            var FeatureLayer8 = new
-            FeatureLayer({
-                url: URL8
-            });
-            var URL9 = "http://106.14.222.88:6080/arcgis/rest/services/TongjiCore_LW/MapServer/17";
-            var FeatureLayer9 = new
-            FeatureLayer({
-                url: URL9
-            });
-            var URL10 = "http://106.14.222.88:6080/arcgis/rest/services/TongjiCore_LW/MapServer/18";
-            var FeatureLayer10 = new
-            FeatureLayer({
-                url: URL10
-            });
-            var URL11 = "http://106.14.222.88:6080/arcgis/rest/services/TongjiCore_LW/MapServer/19";
-            var FeatureLayer11 = new
-            FeatureLayer({
-                url: URL11
-            });
-            var URL12 = "http://106.14.222.88:6080/arcgis/rest/services/TongjiCore_LW/MapServer/20";
-            var FeatureLayer12 = new
-            FeatureLayer({
-                url: URL12
-            });
-            var URL13 = "http://106.14.222.88:6080/arcgis/rest/services/TongjiCore_LW/MapServer/21";
-            var FeatureLayer13 = new
-            FeatureLayer({
-                url: URL13
-            });
-            var URL14 = "http://106.14.222.88:6080/arcgis/rest/services/TongjiCore_LW/MapServer/22";
-            var FeatureLayer14 = new
-            FeatureLayer({
-                url: URL14
-            });
-            var URL15 = "http://106.14.222.88:6080/arcgis/rest/services/TongjiCore_LW/MapServer/23";
-            var FeatureLayer15 = new
-            FeatureLayer({
-                url: URL15
-            });
+            feature5.opacity = 0.4;
+            // feature5.elevationInfo = 4;
 
+            map.add(feature5);
+            map.add(feature4);
+            map.add(feature3);
+            map.add(feature2);
+            map.add(feature1);
 
-			map.add(FeatureLayer1);
-            map.add(FeatureLayer2);
-            map.add(FeatureLayer3);
-            map.add(FeatureLayer4);
-            map.add(FeatureLayer5);
-            map.add(FeatureLayer6);
-            map.add(FeatureLayer7);
-            map.add(FeatureLayer8);
-            map.add(FeatureLayer9);
-            map.add(FeatureLayer10);
-            map.add(FeatureLayer11);
-            map.add(FeatureLayer12);
-            map.add(FeatureLayer13);
-            map.add(FeatureLayer14);
-            map.add(FeatureLayer15);
-			//map.add(commute_pressure_ImageryLayer);
+            // on(dom.byId("1kmCheck"), 'change', setVisible);
+            //
+            // function setVisible () {
+            //     let inputs = query(".list_item");
+            //     let inputCount = inputs.length;
+            //
+            //     visibleLayerIds = [];
+            //
+            //     for (let i = 0; i < inputCount; ++i) {
+            //         if (inputs[i].checked) {
+            //             visibleLayerIds.push(inputs[i].value);
+            //         }
+            //     }
+            //
+            //     if (visibleLayerIds.length === 0) {
+            //         visibleLayerIds.push(-1);
+            //     }
+            //
+            //     map.setVisibleLayers(visibleLayerIds);
+            // }
 
-		});
+            // map.add(commute_pressure_ImageryLayer);
+
+        });
     </script>
 </head>
 
@@ -306,18 +277,25 @@
             <li class="breadcrumb-item">
                 <a href="#">主页</a>
             </li>
-			<li class="breadcrumb-item">
+            <li class="breadcrumb-item">
                 <a href="#">环同济经济圈</a>
             </li>
-            <li class="breadcrumb-item active">环同济POI分布</li>
+            <li class="breadcrumb-item active">同济大学辐射范围布局图</li>
         </ol>
+<!--        <span id="layer_list">-->
+<!--            <input type="checkbox" class="list_item" id="1kmCheck" value=0 /> 1km-->
+<!--            <input type="checkbox" class="list_item" id="3kmCheck" value=1 /> 3km-->
+<!--            <input type="checkbox" class="list_item" id="5kmCheck" value=2 /> 5km-->
+<!--            <input type="checkbox" class="list_item" id="7kmCheck" value=3 /> 7km-->
+<!--            <input type="checkbox" class="list_item" id="10kmCheck" value=4 /> 10km-->
+<!--        </span>-->
         <div class="row">
             <div class="col-12" style="height: 650px;">
                 <div id="viewDiv" style="width: 100%; height: 100%;"></div>
-				  <div id="title" class="esri-widget">
-					<span id="totalNumber">环同济经济圈</span>的文创POI分布。
-				  </div>
-			</div>
+                <div id="title" class="esri-widget">
+                    <span id="totalNumber">同济正门为中心</span>多公里可达覆盖范围。
+                </div>
+            </div>
         </div>
     </div>
     <!-- /.container-fluid-->
