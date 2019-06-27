@@ -1,4 +1,4 @@
-!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="zh">
 
 <head>
@@ -139,6 +139,10 @@
             map.add(huff_center_FeatureLayer);
 
         });
+        function showS1()
+    {
+        document.getElementById("stable2").hidden=!document.getElementById("stable2").hidden
+    }
     </script>
 </head>
 
@@ -149,6 +153,11 @@
     <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
     </button>
+    
+        <button onclick="showS1()" style="background:rgb(79, 183, 224);border-radius:20px;">查看地图位置</button>
+        <div id="stable2"  hidden="true" width="800px" height="700px" hidden="true" style="position:absolute;right:100px;top:50px;">
+                <img src="selectionmap.png" ></img>
+        </div>
     <div class="collapse navbar-collapse" id="navbarResponsive">
         <ul class="navbar-nav navbar-sidenav" id="exampleAccordion">
             <li class="nav-item" data-toggle="tooltip" data-placement="right" title="简单地图表述">
@@ -265,14 +274,22 @@
             <li class="breadcrumb-item active">HUFF模型</li>
         </ol>
         <div class="row">
-            <div class="col-12" style="height: 650px;">
-                <div id="viewDiv" style="width: 100%; height: 100%;"></div>
-                <div id="title" class="esri-widget">
-                    <span id="totalNumber">569</span>个通勤起始点到<span id="secondNumber">38</span>个新设文创中心的概率。
-                </div>
+            
+            <div class="col-12" style="max-width: 90%; padding-left: 5%;">
+                <h1>根据哈夫理论的发展构想</h1>
+                <p>根据哈夫论点，商店商圈规模大小与购物场所对消费者的吸引力成正比，与消费者去消费场所感觉的时间距离阻力成反比。商店购物场所各种因素的吸引力越大，则该商店的商圈规模也就大；消费者从出发地到该商业场所的时间越长，则该商店商圈的规模也就越小。经过分析，我们认为以下3个区域符合我们限定的主要要求，1. 不增加已有的城市交通通勤压力。2. 拥有足够区域规划经济适用住房。 3. 符合哈夫定律，离城市中心尽可能的近：
+                </p>
+                <p>1.	江桥镇</p>
+                <p>   为了将“北虹桥”地块打造成宜居宜业社区，江桥镇加快启动“北虹之星”开发建设。东部片区定位为高端国际社区，规划建设九年一贯制名校，集文化、体育、卫生服务为一体的邻里中心，以及艺术馆等公共配套设施，满足社区内高端人士及境外人士需求。西部片区是地铁14号线和规划中的地铁20号线的停车段，在周围建设开发商业综合体、商务办公楼、住宅、酒店式公寓等项目。
+                </p> 
+                <p>2.	吴泾镇</p>
+                <p>据了解，途径吴泾的15号线将建成通车，23号线有望开工，并计划开设贯穿各大园区、企业往来轨交站点的穿梭巴士，解决“最后一公里”问题。同时，新投放两幅住宅用地、新建或盘活数千余套人才公寓，提升满天星广场、宝龙广场、弘基广场、永德路等商业设施的服务水平和业态水准，以生态宜居的环境吸引创新创业人才就地转化为居住人口,真正实现生产、生活、生态“三生”融合。
+                </p>
+                <p>3.	南翔镇</p>
+                <p>园区出台了多项扶持政策和配套措施。文化人才进驻之后，只要符合条件，就可以在嘉定购买人才公寓，也可以租住人才公寓。在设计师等紧缺人才引进方面给予倾斜政策，提供住房补贴、人才公寓，并帮助解决子女教育问题。
+                   </p>
             </div>
         </div>
-    </div>
     <!-- /.container-fluid-->
     <!-- /.content-wrapper-->
     <footer class="sticky-footer">

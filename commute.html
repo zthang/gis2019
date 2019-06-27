@@ -37,19 +37,19 @@
     }
 	</style>
     <script>
-        require([
+            require([
 			"esri/layers/FeatureLayer",
             "esri/Map",
             "esri/views/MapView",
 			"esri/widgets/Legend",
-			"esri/layers/MapImageLayer",
+			"esri/layers/ImageryLayer",
 			"esri/widgets/BasemapToggle",
 			"esri/widgets/Expand",
 			"esri/core/lang",
 			"esri/core/promiseUtils",
 			"esri/core/watchUtils",
             "dojo/domReady!"
-        ], function(FeatureLayer, Map, MapView, Legend, MapImageLayer, BasemapToggle,
+        ], function(FeatureLayer, Map, MapView, Legend, ImageryLayer, BasemapToggle, 
 					Expand, lang, promiseUtils, watchUtils){
 					
 			let totalNumber;
@@ -61,7 +61,7 @@
             var view = new MapView({
                 container: "viewDiv",  // Reference to the scene div created in step 5
                 map: map,  // Reference to the map object created before the scene
-                zoom: 11,  // Sets zoom level based on level of detail (LOD)
+                zoom: 10,  // Sets zoom level based on level of detail (LOD)
                 center: [121.48, 31.23]  // Sets center point of view using longitude,latitude
             
 			});
@@ -69,7 +69,6 @@
 			//UI
 			//右上信息栏
 			view.ui.add("title", "top-right");
-			
 			//图例
 			view.ui.add(new Legend({
 			view: view,
@@ -82,79 +81,37 @@
 				// 2 - Set properties
 				view: view, // view that provides access to the map's 'topo' basemap
 				nextBasemap: "hybrid" // allows for toggling to the 'hybrid' basemap
-			});			
+			});
+			
 			// Add widget to the top right corner of the view
 			view.ui.add(toggle, "top-right");
 			
-			//信息框
-			var template = { // autocasts as new PopupTemplate()
-			title: "{Name}人才公寓",
-			content: [{
-			  // It is also possible to set the fieldInfos outside of the content
-			  // directly in the popupTemplate. If no fieldInfos is specifically set
-			  // in the content, it defaults to whatever may be set within the popupTemplate.
-			  type: "fields",
-			  fieldInfos: [{
-				fieldName: "OBJECTID",
-				label: "No.",
-				visible: true,
-				format: {
-				  places: 0
-				}
-			  }, {
-				fieldName: "名称",
-				label: "名称",
-				visible: true
-			  }, {
-				fieldName: "地址",
-				label: "地址",
-				visible: true,
-				format: {
-				  digitSeparator: true,
-				  places: 0
-				}
-			  }]
-			}]
-		  };
 			
 			//图层些
-			var commute_start_URL = "https://10.60.42.201:6442/arcgis/rest/services/Du/Commute_Route_Start_End/MapServer/1";
-            var commute_start_FeatureLayer = new 
+			var hotspot_URL = "http://106.14.222.88:6080/arcgis/rest/services/ShanghaiHotSpotCount/MapServer/22";
+            var hotspot_FeatureLayer = new 
 				FeatureLayer({
-				url: commute_start_URL,
-				popupTemplate: template
+				url: hotspot_URL,
+                opacity: 0.6
 				});
-			
-			var commute_end_URL = "https://10.60.42.201:6442/arcgis/rest/services/Du/Commute_Route_Start_End/MapServer/0";
-            var commute_end_FeatureLayer = new 
+						
+            map.add(hotspot_FeatureLayer);	
+            var otherURL = "http://106.14.222.88:6080/arcgis/rest/services/ShanghaiHotSpotCount/MapServer/35";
+            var otherFeatureLayer = new 
 				FeatureLayer({
-				url: commute_end_URL
+				url: otherURL,
+                opacity: 0.6
 				});
-				
-			var commute_route_URL = "https://10.60.42.201:6442/arcgis/rest/services/Du/Commute_Route_Start_End/MapServer/2";
-            var commute_route_FeatureLayer = new 
-				FeatureLayer({
-				url: commute_route_URL
-				});				
-			
-			var commute_pressure_URL = "https://10.60.42.201:6442/arcgis/rest/services/Du/Road_Pressure_Interpolation/ImageServer";
-            var commute_pressure_ImageryLayer = new 
-				MapImageLayer({
-				url: commute_pressure_URL,
-				format: "jpgpng",
-                opacity: 0.5
-				});			
-			
-			
-			map.add(commute_route_FeatureLayer);	
-            map.add(commute_end_FeatureLayer);
-			map.add(commute_start_FeatureLayer);
-			
-			//map.add(commute_pressure_ImageryLayer);
+						
+			map.add(otherFeatureLayer);	
 
-			
-	  
+
+
 		});	
+        function showS1()
+    {
+        document.getElementById("stable").hidden=!document.getElementById("stable").hidden
+    }
     </script>
 </head>
 
@@ -165,6 +122,55 @@
     <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
     </button>
+    <div style="position:relative;left:80px;color:aliceblue;">
+        <button onclick="showS1()" style="background:rgb(79, 183, 224);border-radius:20px;">查看影响线路</button>
+        <div id="stable"  hidden="true">
+            <p>受到严重影响的地铁线路有：1，2，7， 9，11，10，12，13号线，每日通勤量负担比其他线路负担大。</p>
+        <table border="1">
+            <tr>
+            <td>临近企业数</td>
+            <td>区域</td>
+            <td>线路</td>
+            </tr>
+
+            <tr>
+                <td>
+                1008</td><td>	徐汇区</td><td>	地铁1号线(富锦路--莘庄)
+            </td>
+            </tr><tr><td>
+                586</td><td>	黄浦区</td><td>	(在建)地铁12号线(金穗路--七莘路)
+            </td></tr><tr><td>
+                562</td><td>	长宁区	</td><td>
+            </td></tr><tr><td>
+                559</td><td>	虹口区</td><td>	地铁10号线(虹桥火车站--新江湾城)
+            </td></tr><tr><td>
+                
+            545</td><td>	浦东新区	</td><td>地铁2号线(广兰路--徐泾东)
+        </td></tr><tr><td>
+                544</td><td>	静安区</td><td>	地铁2号线(广兰路--徐泾东)
+            </td></tr><tr><td>
+                537	</td><td>普陀区</td><td>	地铁11号线(安亭--江苏路)
+            </td></tr><tr><td> 516</td><td>	静安区</td><td>	(在建)地铁13号线(华江路--华夏中路)
+            </td></tr><tr><td>458</td><td>	黄浦区</td><td>	地铁10号线(虹桥火车站--新江湾城)
+           </td> </tr><tr><td>447</td><td>	黄浦区</td><td>	(在建)地铁12号线(金穗路--七莘路)
+            </td></tr><tr><td>447</td><td>	静安区</td><td>	地铁7号线(花木路--美兰湖)
+            </td></tr><tr><td>443</td><td>	徐汇区</td><td>	地铁1号线(富锦路--莘庄)
+            </td></tr><tr><td>442</td><td>	静安区</td><td>	地铁11号线(安亭--江苏路)
+            </td></tr><tr><td>435</td><td>	黄浦区</td><td>	(在建)地铁12号线(金穗路--七莘路)
+            </td></tr><tr><td>422</td><td>	静安区</td><td>	地铁2号线(广兰路--徐泾东)
+            </td></tr><tr><td>419</td><td>	静安区</td><td>	(在建)地铁13号线(华江路--华夏中路)
+            </td></tr><tr><td>403</td><td>	黄浦区</td><td>	(在建)地铁13号线(华江路--华夏中路)
+            </td></tr><tr><td>395</td><td>	黄浦区</td><td>	(在建)地铁12号线(金穗路--七莘路)
+            </td></tr><tr><td>389</td><td>	徐汇区</td><td>	地铁9号线(松江新城--杨高中路)
+</td>
+            </tr>
+
+
+            </table>
+        </div>
+
+    </div>
+
     <div class="collapse navbar-collapse" id="navbarResponsive">
         <ul class="navbar-nav navbar-sidenav" id="exampleAccordion">
             <li class="nav-item" data-toggle="tooltip" data-placement="right" title="简单地图表述">
@@ -284,10 +290,18 @@
             <div class="col-12" style="height: 650px;">
                 <div id="viewDiv" style="width: 100%; height: 100%;"></div>
 				  <div id="title" class="esri-widget">
-					<span id="totalNumber">569</span>个非中心区人才公寓作为通勤起始点。
+					通勤压力
 				  </div>
 			</div>
         </div>
+    </div>
+    <div class="col-12" style="max-width: 90%; padding-left: 5%;">
+        <h1>交通拥堵情况</h1>
+
+
+
+
+           
     </div>
     <!-- /.container-fluid-->
     <!-- /.content-wrapper-->
