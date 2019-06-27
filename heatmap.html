@@ -89,15 +89,14 @@
 			
 			//图层些
 			
-			var POI_URL = "https://10.60.42.201:6442/arcgis/rest/services/Du/shanghai_reli/MapServer";
-            var POI_FeatureLayer = new
-				MapImageLayer({
-				url: POI_URL,
-                opacity: 0.6
-				});						
-			
-			
-			map.add(POI_FeatureLayer);
+			var POI_URL = "http://106.14.222.88:6080/arcgis/rest/services/上海v1_2/MapServer/60";
+            var POI_FeatureLayer = new 
+				FeatureLayer({
+                url: POI_URL,
+                outFields: ["*"],
+                opacity:0.6
+                });
+            map.add(POI_FeatureLayer);	
 			
 
 		});	
@@ -124,9 +123,6 @@
                     </li>
                     <li>
                         <a href="heatmap.html">全市热力图</a>
-                    </li>
-                    <li>
-                        <a href="district.html">各区县占比图</a>
                     </li>
                     <li>
                         <a href="POIcharts.html">统计图表</a>
@@ -156,9 +152,7 @@
                     <span class="nav-link-text">空间分布分析</span>
                 </a>
                 <ul class="sidenav-second-level collapse" id="collapse2">
-                    <li>
-                        <a href="circles.html">环线分析</a>
-                    </li>
+                    
                     <li>
                         <a href="distance.html">直线与实际距离分析</a>
                     </li>
@@ -240,7 +234,7 @@
     <footer class="sticky-footer">
         <div class="container">
             <div class="text-center">
-                <small>Copyright © GIS小组 2018</small>
+                <small>Copyright © GIS小组 2019</small>
             </div>
         </div>
     </footer>
