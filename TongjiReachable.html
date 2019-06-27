@@ -14,91 +14,146 @@
     <link href="vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
     <!-- Custom styles for this template-->
     <link href="css/sb-admin.css" rel="stylesheet">
-	<!-- WebGL rendering in 2D -->
-	
-	<!-- arcgis线上调用 -->
-    <link rel="stylesheet" href="https://js.arcgis.com/4.7/esri/css/main.css">
-    <script src="https://js.arcgis.com/4.7/"></script>
-	<style>    
-	  #title {
-      padding: 15px;
-      max-width: 500px;
-      }
-	  #totalNumber {
-      color: #ed5050;
-      font-size: 36pt;
-      font-weight: bolder;
-    }
-    </style>
+    <!-- WebGL rendering in 2D -->
     <script>
         var dojoConfig = {
-        has: {
-          "esri-featurelayer-webgl": 1
+            has: {
+                "esri-featurelayer-webgl": 1
             }
         };
-        </script>
+    </script>
+    <!-- arcgis线上调用 -->
+    <link rel="stylesheet" href="https://js.arcgis.com/4.7/esri/css/main.css">
+    <script src="https://js.arcgis.com/4.7/"></script>
+    <style>
+        #title {
+            padding: 15px;
+            max-width: 500px;
+        }
+        #totalNumber {
+            color: #ed5050;
+            font-size: 36pt;
+            font-weight: bolder;
+        }
+    </style>
     <script>
         require([
-			"esri/layers/FeatureLayer",
+            "esri/layers/FeatureLayer",
             "esri/Map",
             "esri/views/MapView",
-			"esri/widgets/Legend",
-			"esri/layers/ImageryLayer",
-			"esri/widgets/BasemapToggle",
-			"esri/widgets/Expand",
-			"esri/core/lang",
-			"esri/core/promiseUtils",
-			"esri/core/watchUtils",
-            "dojo/domReady!"
-        ], function(FeatureLayer, Map, MapView, Legend, ImageryLayer, BasemapToggle, 
-					Expand, lang, promiseUtils, watchUtils){
-					
-			let totalNumber;
-			let highlightHandle = null;
-			
+            "esri/widgets/Legend",
+            "esri/layers/ImageryLayer",
+            "esri/widgets/BasemapToggle",
+            "esri/widgets/Expand",
+            "esri/core/lang",
+            "esri/core/promiseUtils",
+            "esri/core/watchUtils",
+            "dojo/dom",
+            "dojo/on",
+            "dojo/query",
+            "dojo/domReady!",
+            "dojo"
+        ], function(FeatureLayer, Map, MapView, Legend, ImageryLayer, BasemapToggle,
+                    Expand, lang, promiseUtils, watchUtils, mod1, dom, on, query, dojo){
+
+            let totalNumber;
+            let highlightHandle = null;
+
             var map = new Map({
                 basemap: "topo"
             });
             var view = new MapView({
                 container: "viewDiv",  // Reference to the scene div created in step 5
                 map: map,  // Reference to the map object created before the scene
-                zoom: 10,  // Sets zoom level based on level of detail (LOD)
+                zoom: 11,  // Sets zoom level based on level of detail (LOD)
                 center: [121.48, 31.23]  // Sets center point of view using longitude,latitude
-            
-			});
-			
-			//UI
-			//右上信息栏
-			view.ui.add("title", "top-right");
-			//图例
-			view.ui.add(new Legend({
-			view: view,
-			style: "classic"
-			}), "bottom-left");
-			
-			//底图切换选项
-			// 1 - Create the widget
-			var toggle = new BasemapToggle({
-				// 2 - Set properties
-				view: view, // view that provides access to the map's 'topo' basemap
-				nextBasemap: "hybrid" // allows for toggling to the 'hybrid' basemap
-			});
-			
-			// Add widget to the top right corner of the view
-			view.ui.add(toggle, "top-right");
-			
-			
-			//图层些
-			var hotspot_URL = "http://106.14.222.88:6080/arcgis/rest/services/ShanghaiHotSpotCount/MapServer/35";
-            var hotspot_FeatureLayer = new 
-				FeatureLayer({
-				url: hotspot_URL,
-                opacity: 0.6
-				});
-						
-			map.add(hotspot_FeatureLayer);	
 
-		});	
+            });
+
+            //UI
+            //右上信息栏
+            view.ui.add("title", "top-right");
+            //图例
+            view.ui.add(new Legend({
+                view: view,
+                style: "classic"
+            }), "bottom-left");
+
+            //底图切换选项
+            // 1 - Create the widget
+            var toggle = new BasemapToggle({
+                // 2 - Set properties
+                view: view, // view that provides access to the map's 'topo' basemap
+                nextBasemap: "hybrid" // allows for toggling to the 'hybrid' basemap
+            });
+
+            // Add widget to the top right corner of the view
+            view.ui.add(toggle, "top-right");
+
+
+            //图层些
+            let URL1 = "http://106.14.222.88:6080/arcgis/rest/services/TongjiCore_LW/MapServer/1";
+            let feature1 = new FeatureLayer({
+                url: URL1
+            });
+            feature1.opacity = 0.4;
+            // feature1.opacity = 0.0;
+            // feature1.elevationInfo = 0;
+            let URL2 = "http://106.14.222.88:6080/arcgis/rest/services/TongjiCore_LW/MapServer/2";
+            let feature2 = new FeatureLayer({
+                url: URL2
+            });
+            feature2.opacity = 0.4;
+            // feature2.elevationInfo = 1;
+            let URL3 = "http://106.14.222.88:6080/arcgis/rest/services/TongjiCore_LW/MapServer/3";
+            let feature3 = new FeatureLayer({
+                url: URL3
+            });
+            feature3.opacity = 0.4;
+            // feature3.elevationInfo = 2;
+            let URL4 = "http://106.14.222.88:6080/arcgis/rest/services/TongjiCore_LW/MapServer/4";
+            let feature4 = new FeatureLayer({
+                url: URL4
+            });
+            feature4.opacity = 0.4;
+            // feature4.elevationInfo = 3;
+            let URL5 = "http://106.14.222.88:6080/arcgis/rest/services/TongjiCore_LW/MapServer/5";
+            let feature5 = new FeatureLayer({
+                url: URL5
+            });
+            feature5.opacity = 0.4;
+            // feature5.elevationInfo = 4;
+
+            map.add(feature5);
+            map.add(feature4);
+            map.add(feature3);
+            map.add(feature2);
+            map.add(feature1);
+
+            // on(dom.byId("1kmCheck"), 'change', setVisible);
+            //
+            // function setVisible () {
+            //     let inputs = query(".list_item");
+            //     let inputCount = inputs.length;
+            //
+            //     visibleLayerIds = [];
+            //
+            //     for (let i = 0; i < inputCount; ++i) {
+            //         if (inputs[i].checked) {
+            //             visibleLayerIds.push(inputs[i].value);
+            //         }
+            //     }
+            //
+            //     if (visibleLayerIds.length === 0) {
+            //         visibleLayerIds.push(-1);
+            //     }
+            //
+            //     map.setVisibleLayers(visibleLayerIds);
+            // }
+
+            // map.add(commute_pressure_ImageryLayer);
+
+        });
     </script>
 </head>
 
@@ -122,6 +177,9 @@
                     </li>
                     <li>
                         <a href="heatmap.html">全市热力图</a>
+                    </li>
+                    <li>
+                        <a href="district.html">各区县占比图</a>
                     </li>
                     <li>
                         <a href="POIcharts.html">统计图表</a>
@@ -151,9 +209,11 @@
                     <span class="nav-link-text">空间分布分析</span>
                 </a>
                 <ul class="sidenav-second-level collapse" id="collapse2">
-                    
                     <li>
-                        <a href=distance.html">直线与实际距离分析</a>
+                        <a href="circles.html">环线分析</a>
+                    </li>
+                    <li>
+                        <a href="distance.html">直线与实际距离分析</a>
                     </li>
                     <li>
                         <a href="relations.html">与其他产业的关系</a>
@@ -184,7 +244,10 @@
                 </a>
                 <ul class="sidenav-second-level collapse" id="collapseComponents">
                     <li>
-                        <a href="tongjiPOI.html">环同济POI分布与重新布局</a>
+                        <a href="tongjiPOI.html">环同济POI分布</a>
+                    </li>
+                    <li>
+                        <a href="TongjiReachable.html">同济大学辐射范围布局图</a>
                     </li>
                     <li>
                         <a href="tongjicharts.html">统计图表</a>
@@ -214,18 +277,25 @@
             <li class="breadcrumb-item">
                 <a href="#">主页</a>
             </li>
-			<li class="breadcrumb-item">
-                <a href="#">文创中心</a>
+            <li class="breadcrumb-item">
+                <a href="#">环同济经济圈</a>
             </li>
-            <li class="breadcrumb-item active">热点分析</li>
+            <li class="breadcrumb-item active">同济大学辐射范围布局图</li>
         </ol>
+<!--        <span id="layer_list">-->
+<!--            <input type="checkbox" class="list_item" id="1kmCheck" value=0 /> 1km-->
+<!--            <input type="checkbox" class="list_item" id="3kmCheck" value=1 /> 3km-->
+<!--            <input type="checkbox" class="list_item" id="5kmCheck" value=2 /> 5km-->
+<!--            <input type="checkbox" class="list_item" id="7kmCheck" value=3 /> 7km-->
+<!--            <input type="checkbox" class="list_item" id="10kmCheck" value=4 /> 10km-->
+<!--        </span>-->
         <div class="row">
             <div class="col-12" style="height: 650px;">
                 <div id="viewDiv" style="width: 100%; height: 100%;"></div>
-				  <div id="title" class="esri-widget">
-					<span id="totalNumber">热点</span>集中在市中心。
-				  </div>
-			</div>
+                <div id="title" class="esri-widget">
+                    <span id="totalNumber">同济正门为中心</span>多公里可达覆盖范围。
+                </div>
+            </div>
         </div>
     </div>
     <!-- /.container-fluid-->
@@ -233,7 +303,7 @@
     <footer class="sticky-footer">
         <div class="container">
             <div class="text-center">
-                <small>Copyright © GIS小组 2019</small>
+                <small>Copyright © GIS小组 2018</small>
             </div>
         </div>
     </footer>

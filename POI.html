@@ -24,7 +24,7 @@
 	</script>
 	<!-- arcgis线上调用 -->
     <link rel="stylesheet" href="http://js.arcgis.com/4.7/esri/css/main.css">
-    <script src="http://js.arcgis.com/4.7/"></script>
+    <script src="https://js.arcgis.com/4.11/"></script>
 	<style>    
 	  #title {
       padding: 15px;
@@ -38,6 +38,14 @@
 	</style>
     <script>
         require([
+            "esri/layers/support/LabelClass",
+            "esri/Color",
+            "esri/Graphic",
+            "esri/symbols/TextSymbol",
+            "esri/layers/GraphicsLayer",
+            "esri/symbols/SimpleLineSymbol",
+            "esri/symbols/SimpleMarkerSymbol",
+            "esri/renderers/SimpleRenderer",
 			"esri/layers/FeatureLayer",
             "esri/Map",
             "esri/views/MapView",
@@ -48,21 +56,23 @@
 			"esri/core/lang",
 			"esri/core/promiseUtils",
 			"esri/core/watchUtils",
-            "dojo/domReady!", "POI.html/../js/sdk/arcgis3.20"
-        ], function(FeatureLayer, Map, MapView, Legend, ImageryLayer, BasemapToggle,
-                    Expand, lang, promiseUtils, watchUtils, mod1, esri){
+            "dojo/domReady!"
+        ], function(LabelClass,Color,Graphic,TextSymbol,GraphicsLayer,SimpleLineSymbol,SimpleMarkerSymbol,SimpleRenderer,FeatureLayer, Map, MapView, Legend, ImageryLayer, BasemapToggle, 
+					Expand, lang, promiseUtils, watchUtils){
 					
 			let totalNumber;
 			let highlightHandle = null;
 			
             var map = new Map({
-                basemap: "topo"
+                basemap: "topo",
+                showLabels:true,
             });
             var view = new MapView({
                 container: "viewDiv",  // Reference to the scene div created in step 5
                 map: map,  // Reference to the map object created before the scene
                 zoom: 11,  // Sets zoom level based on level of detail (LOD)
-                center: [121.48, 31.23]  // Sets center point of view using longitude,latitude
+                center: [121.48, 31.23],  // Sets center point of view using longitude,latitude
+                showLabels:true
             
 			});
 			
@@ -85,32 +95,149 @@
 			
 			// Add widget to the top right corner of the view
 			view.ui.add(toggle, "top-right");
-			
-			
-			//图层些
+			var template = { // autocasts as new PopupTemplate()
+			title: "{Name}",
+			content: [{
+			  // It is also possible to set the fieldInfos outside of the content
+			  // directly in the popupTemplate. If no fieldInfos is specifically set
+			  // in the content, it defaults to whatever may be set within the popupTemplate.
+			  type: "fields",
+			  fieldInfos: [{
+				fieldName: "OBJECTID",
+				label: "No.",
+				visible: true,
+				format: {
+				  places: 0
+				}
+              },{
+				fieldName: "Code",
+				label: "邮政编号",
+				visible: true,
+				format: {
+				  places: 0
+				}
+			  },{
+				fieldName: "CUL_NUM",
+				label: "文化产业数目:",
+				visible: true,
+				format: {
+				  places: 0
+				}
+			  },
+            ]
+			}]
+          };
 
-			var POI_URL = "http://106.14.222.88:6080/arcgis/rest/services/上海v1_2/MapServer/0";
+//通过radio标签的value值来选择显示图曾
+$("input").click(function(event){
+    var a = event.target.value
+    layerList[a].visible=!layerList[a].visible
+
+})
+var layerList=[]
+const lc = {
+                labelExpressionInfo: { expression: "$feature.Name" },
+                labelPlacement: "above-center",
+                symbol: {
+                type: "text",  // autocasts as new TextSymbol()
+                color:"black",
+                font: {  // autocast as new Font()
+                    family:"arial",
+                    size: 12,
+                    weight: "bold"
+                    }
+                }
+            };
+			//图层些
+			var POI_URL = "http://106.14.222.88:6080/arcgis/rest/services/上海v1_2/MapServer/61";
             var POI_FeatureLayer = new 
 				FeatureLayer({
-				url: POI_URL,
-              
-				});						
-			
-			
-			map.add(POI_FeatureLayer);
-			
-
+                url: POI_URL,
+                popupTemplate: template,
+                outFields: ["*"],
+                labelingInfo:[lc]
+                });
+            map.add(POI_FeatureLayer);	
+            var POI_FeatureLayer_0 = new 
+				FeatureLayer({
+                url: "http://106.14.222.88:6080/arcgis/rest/services/上海v1_2/MapServer/55",
+                outFields: ["*"],
+                });
+            map.add(POI_FeatureLayer_0);
+            layerList.push(POI_FeatureLayer_0)
+            var POI_FeatureLayer_1 = new 
+				FeatureLayer({
+                url: "http://106.14.222.88:6080/arcgis/rest/services/上海v1_2/MapServer/56",
+                outFields: ["*"],
+                });
+            map.add(POI_FeatureLayer_1);
+            layerList.push(POI_FeatureLayer_1)
+            var POI_FeatureLayer_2 = new 
+				FeatureLayer({
+                url: "http://106.14.222.88:6080/arcgis/rest/services/上海v1_2/MapServer/57",
+                outFields: ["*"],
+                });
+            map.add(POI_FeatureLayer_2);
+            layerList.push(POI_FeatureLayer_2)
+            var POI_FeatureLayer_3 = new 
+				FeatureLayer({
+                url: "http://106.14.222.88:6080/arcgis/rest/services/上海v1_2/MapServer/58",
+                outFields: ["*"],
+                });
+            map.add(POI_FeatureLayer_3);
+            layerList.push(POI_FeatureLayer_3)
+            var POI_FeatureLayer_4 = new 
+				FeatureLayer({
+                url: "http://106.14.222.88:6080/arcgis/rest/services/上海v1_2/MapServer/59",
+                outFields: ["*"],
+                });
+            map.add(POI_FeatureLayer_4);
+            layerList.push(POI_FeatureLayer_4)
+            var POI_FeatureLayer_5 = new 
+				FeatureLayer({
+                url: "http://106.14.222.88:6080/arcgis/rest/services/上海v1_2/MapServer/41",
+                outFields: ["*"],
+                });
+            map.add(POI_FeatureLayer_5);
+            layerList.push(POI_FeatureLayer_5)
+            POI_FeatureLayer_0.visible=false
+            POI_FeatureLayer_1.visible=false
+            POI_FeatureLayer_2.visible=false
+            POI_FeatureLayer_3.visible=false
+            POI_FeatureLayer_4.visible=false
+            POI_FeatureLayer_5.visible=false
 		});	
+    function showZ()
+    {
+        document.getElementById("z").hidden=!document.getElementById("z").hidden
+    }
+    function nShowZ() {
+        $("#z").hidden=true
+      }
     </script>
 </head>
 
 <body class="fixed-nav sticky-footer bg-dark" id="page-top">
+        
 <!-- Navigation-->
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top" id="mainNav">
     <a class="navbar-brand" href="index.html">上海市文化产业布局现状与分析</a>
     <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
     </button>
+    <div style="position:relative;left:50px;top:4px;color:aliceblue;">
+		图层：
+		<label><input type="checkbox" name="like" value="0">外环_中环区域</label>
+        <label><input type="checkbox" name="like" value="1">中环_内环区域</label>
+        <label><input type="checkbox" name="like" value="2">内环区域</label>
+        <label><input type="checkbox" name="like" value="3">中环区域</label>
+        <label><input type="checkbox" name="like" value="4">外环区域</label>
+		<label><input type="checkbox" name="like" value="5">上海文化产业</label>
+    </div>
+    <div style="position:relative;left:80px;color:aliceblue;">
+        <button onclick="showZ()" style="background:rgb(79, 183, 224);border-radius:20px;">查看文化产业分布柱状图</button>
+        <img id="z" src="img/z.png" width="800px" height="700px" hidden="true" style="position:absolute;right:-150px;top:50px;">
+    </div>
     <div class="collapse navbar-collapse" id="navbarResponsive">
         <ul class="navbar-nav navbar-sidenav" id="exampleAccordion">
 			<li class="nav-item" data-toggle="tooltip" data-placement="right" title="简单地图表述">
@@ -124,9 +251,6 @@
                     </li>
                     <li>
                         <a href="heatmap.html">全市热力图</a>
-                    </li>
-                    <li>
-                        <a href="district.html">各区县占比图</a>
                     </li>
                     <li>
                         <a href="POIcharts.html">统计图表</a>
@@ -156,9 +280,7 @@
                     <span class="nav-link-text">空间分布分析</span>
                 </a>
                 <ul class="sidenav-second-level collapse" id="collapse2">
-                    <li>
-                        <a href="circles.html">环线分析</a>
-                    </li>
+                    
                     <li>
                         <a href="distance.html">直线与实际距离分析</a>
                     </li>
@@ -240,7 +362,7 @@
     <footer class="sticky-footer">
         <div class="container">
             <div class="text-center">
-                <small>Copyright © GIS小组 2018</small>
+                <small>Copyright © GIS小组 2019</small>
             </div>
         </div>
     </footer>

@@ -15,19 +15,178 @@
     <!-- Custom styles for this template-->
     <link href="css/sb-admin.css" rel="stylesheet">
 	<!-- WebGL rendering in 2D -->
+	<script>
+	var dojoConfig = {
+    has: {
+      "esri-featurelayer-webgl": 1
+		}
+	};
+	</script>
+	<!-- arcgis线上调用 -->
+    <link rel="stylesheet" href="http://js.arcgis.com/4.7/esri/css/main.css">
+    <script src="https://js.arcgis.com/4.11/"></script>
+	<style>    
+	  #title {
+      padding: 15px;
+      max-width: 500px;
+      }
+	  #totalNumber {
+      color: #ed5050;
+      font-size: 36pt;
+      font-weight: bolder;
+    }
+	</style>
+    <script>
+        require([
+            "esri/layers/support/LabelClass",
+            "esri/Color",
+            "esri/Graphic",
+            "esri/symbols/TextSymbol",
+            "esri/layers/GraphicsLayer",
+            "esri/symbols/SimpleLineSymbol",
+            "esri/symbols/SimpleMarkerSymbol",
+            "esri/renderers/SimpleRenderer",
+			"esri/layers/FeatureLayer",
+            "esri/Map",
+            "esri/views/MapView",
+			"esri/widgets/Legend",
+			"esri/layers/ImageryLayer",
+			"esri/widgets/BasemapToggle",
+			"esri/widgets/Expand",
+			"esri/core/lang",
+			"esri/core/promiseUtils",
+			"esri/core/watchUtils",
+            "dojo/domReady!"
+        ], function(LabelClass,Color,Graphic,TextSymbol,GraphicsLayer,SimpleLineSymbol,SimpleMarkerSymbol,SimpleRenderer,FeatureLayer, Map, MapView, Legend, ImageryLayer, BasemapToggle, 
+					Expand, lang, promiseUtils, watchUtils){
+					
+			let totalNumber;
+			let highlightHandle = null;
+			
+            var map = new Map({
+                basemap: "topo",
+                showLabels:true,
+            });
+            var view = new MapView({
+                container: "viewDiv",  // Reference to the scene div created in step 5
+                map: map,  // Reference to the map object created before the scene
+                zoom: 11,  // Sets zoom level based on level of detail (LOD)
+                center: [121.48, 31.23],  // Sets center point of view using longitude,latitude
+                showLabels:true
+            
+			});
+			
+			//UI
+			//右上信息栏
+			view.ui.add("title", "top-right");
+			//图例
+			view.ui.add(new Legend({
+			view: view,
+			style: "classic"
+			}), "bottom-left");
+			
+			//底图切换选项
+			// 1 - Create the widget
+			var toggle = new BasemapToggle({
+				// 2 - Set properties
+				view: view, // view that provides access to the map's 'topo' basemap
+				nextBasemap: "hybrid" // allows for toggling to the 'hybrid' basemap
+			});
+			
+			// Add widget to the top right corner of the view
+			view.ui.add(toggle, "top-right");
+			var template = { // autocasts as new PopupTemplate()
+			title: "{Name}",
+			content: [{
+			  // It is also possible to set the fieldInfos outside of the content
+			  // directly in the popupTemplate. If no fieldInfos is specifically set
+			  // in the content, it defaults to whatever may be set within the popupTemplate.
+			  type: "fields",
+			  fieldInfos: [{
+				fieldName: "OBJECTID",
+				label: "No.",
+				visible: true,
+				format: {
+				  places: 0
+				}
+              },{
+				fieldName: "Code",
+				label: "邮政编号",
+				visible: true,
+				format: {
+				  places: 0
+				}
+			  },{
+				fieldName: "CUL_NUM",
+				label: "文化产业数目:",
+				visible: true,
+				format: {
+				  places: 0
+				}
+			  },
+            ]
+			}]
+          };
 
+//通过radio标签的value值来选择显示图曾
+$("input").click(function(event){
+    var a = event.target.value
+    layerList[a].visible=!layerList[a].visible
+
+})
+var layerList=[]
+const lc = {
+                labelExpressionInfo: { expression: "$feature.Name" },
+                labelPlacement: "above-center",
+                symbol: {
+                type: "text",  // autocasts as new TextSymbol()
+                color:"black",
+                font: {  // autocast as new Font()
+                    family:"arial",
+                    size: 12,
+                    weight: "bold"
+                    }
+                }
+            };
+			//图层些
+			var POI_URL = "http://106.14.222.88:6080/arcgis/rest/services/上海v1_2/MapServer/61";
+            var POI_FeatureLayer = new 
+				FeatureLayer({
+                url: POI_URL,
+                popupTemplate: template,
+                outFields: ["*"],
+                labelingInfo:[lc]
+                });
+            map.add(POI_FeatureLayer);	
+		});	
+    function showS1()
+    {
+        document.getElementById("s1").hidden=!document.getElementById("s1").hidden
+    }
+    function showS2()
+    {
+        document.getElementById("s2").hidden=!document.getElementById("s2").hidden
+    }
+    </script>
 </head>
 
 <body class="fixed-nav sticky-footer bg-dark" id="page-top">
+        
 <!-- Navigation-->
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top" id="mainNav">
     <a class="navbar-brand" href="index.html">上海市文化产业布局现状与分析</a>
     <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
     </button>
+    <div style="position:relative;left:80px;color:aliceblue;">
+        <button onclick="showS1()" style="background:rgb(79, 183, 224);border-radius:20px;">查看直线距离密度散点图</button>
+        <img id="s1" src="img/s1.png" width="800px" height="700px" hidden="true" style="position:absolute;right:-350px;top:50px;">
+        <button onclick="showS2()" style="background:rgb(79, 183, 224);border-radius:20px;">查看实际距离密度散点图</button>
+        <img id="s2" src="img/s2.png" width="800px" height="700px" hidden="true" style="position:absolute;right:-350px;top:50px;">
+    </div>
     <div class="collapse navbar-collapse" id="navbarResponsive">
         <ul class="navbar-nav navbar-sidenav" id="exampleAccordion">
-            <li class="nav-item" data-toggle="tooltip" data-placement="right" title="简单地图表述">
+			<li class="nav-item" data-toggle="tooltip" data-placement="right" title="简单地图表述">
                 <a class="nav-link nav-link-collapse collapsed" data-toggle="collapse" href="#collapseMulti" data-parent="#exampleAccordion">
                     <i class="fa fa-fw fa-sitemap"></i>
                     <span class="nav-link-text">简单地图表述</span>
@@ -38,9 +197,6 @@
                     </li>
                     <li>
                         <a href="heatmap.html">全市热力图</a>
-                    </li>
-                    <li>
-                        <a href="district.html">各区县占比图</a>
                     </li>
                     <li>
                         <a href="POIcharts.html">统计图表</a>
@@ -70,9 +226,7 @@
                     <span class="nav-link-text">空间分布分析</span>
                 </a>
                 <ul class="sidenav-second-level collapse" id="collapse2">
-                    <li>
-                        <a href="circles.html">环线分析</a>
-                    </li>
+                    
                     <li>
                         <a href="distance.html">直线与实际距离分析</a>
                     </li>
@@ -81,7 +235,7 @@
                     </li>
                 </ul>
             </li>
-            <li class="nav-item" data-toggle="tooltip" data-placement="right" title="文创中心">
+			<li class="nav-item" data-toggle="tooltip" data-placement="right" title="文创中心">
                 <a class="nav-link nav-link-collapse collapsed" data-toggle="collapse" href="#collapseCenter" data-parent="#exampleAccordion">
                     <i class="fa fa-fw fa-sitemap"></i>
                     <span class="nav-link-text">文创中心</span>
@@ -107,7 +261,7 @@
                     <li>
                         <a href="tongjiPOI.html">环同济POI分布与重新布局</a>
                     </li>
-                    <li>
+					<li>
                         <a href="tongjicharts.html">统计图表</a>
                     </li>
                 </ul>
@@ -120,64 +274,85 @@
             </li>
         </ul>
         <ul class="navbar-nav sidenav-toggler">
-            <li class="nav-item">
-                <a class="nav-link text-center" id="sidenavToggler">
-                    <i class="fa fa-fw fa-angle-left"></i>
-                </a>
-            </li>
-        </ul>
-    </div>
-</nav>
-<div class="content-wrapper">
-    <div class="container-fluid">
-        <!-- Breadcrumbs-->
-        <ol class="breadcrumb">
-            <li class="breadcrumb-item">
-                <a href="#">主页</a>
-            </li>
-			<li class="breadcrumb-item">
-                <a href="#">空间分布分析</a>
-            </li>
-            <li class="breadcrumb-item active">直线与实际距离分析</li>
-        </ol>
-        <div class="row">
-            <div class="col-12" style="max-width: 90%; padding-left: 5%;">
-                <h1>直线与实际距离分析</h1>
-                <p>距离计算:
-                    我们选用人民广场(121.475143，31.228862)为中心，利用各企业的的经纬度信息，计算与 所选中心的球面距离为直线距离。然后以1KM距离为一段，汇总每段距离内文化产业的数量。
-                    </p><p>回归分析:
-                    针对直线距离与文化产业分布的回归模型，我们通过线性、对数、二次、三次、 logistic 五种 模型来拟合，但效果并不是很好，后来我们对自变量距离x取对数后，便得到了类似于正态分布的图像</p>
-                <p>我们从网上采集了上海市各区常住人口和区划面积，针对以上影响因素和文化产业数量算出 每平方千米和没万人所拥有的数量，进行线性规划拟合，结果如下图所示。</p>
-                <img src="img/line.png" style="max-width: 100%"/>
-                <p>距离计算:
-                    因为ARCMAP提供的closet facilities方法占用的时间太长，所以我们使用高德地图的提供的 API来计算所有文化产业样本点与人民广场中心的实际距离。
-                    </p><p>回归分析:
-                    与直线距离的回归分析类似，我们通过线性、对数、二次、三次、logistic五种模型来拟合，仍然没有理想的效果，但对x取对数后，也得到了类似于正态分布的图像。</p>
-                <img src="img/real.png" style="max-width: 100%"/>
-            </div>
+                <li class="nav-item">
+                    <a class="nav-link text-center" id="sidenavToggler">
+                        <i class="fa fa-fw fa-angle-left"></i>
+                    </a>
+                </li>
+            </ul>
         </div>
-    </div>
-    <!-- /.container-fluid-->
-    <!-- /.content-wrapper-->
-    <footer class="sticky-footer">
-        <div class="container">
-            <div class="text-center">
-                <small>Copyright © GIS小组 2018</small>
-            </div>
-        </div>
-    </footer>
-    <!-- Scroll to Top Button-->
-    <a class="scroll-to-top rounded" href="#page-top">
-        <i class="fa fa-angle-up"></i>
-    </a>
-    <!-- Bootstrap core JavaScript-->
-    <script src="vendor/jquery/jquery.min.js"></script>
-    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-    <!-- Core plugin JavaScript-->
-    <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
-    <!-- Custom scripts for all pages-->
-    <script src="js/sb-admin.min.js"></script>
-</div>
-</body>
+    </nav>
+    <div class="content-wrapper">
+        <div class="container-fluid">
+            <!-- Breadcrumbs-->
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item">
+                    <a href="#">主页</a>
+                </li>
+                <li class="breadcrumb-item">
+                    <a href="#">空间分布分析</a>
+                </li>
+                <li class="breadcrumb-item active">直线与实际距离分析</li>
+            </ol>
+            <div class="row">
+                <div class="col-12" style="height: 650px;">
+                    <div id="viewDiv" style="width: 100%; height: 100%;"></div>
+                      <div id="title" class="esri-widget" style="position:relative;bottom:10px;overflow-y:auto; overflow-x:auto;height: 640px">
+                        <div class="row">
+                                <div class="col-12" style="max-width: 90%; padding-left: 5%;">
+                                    <h1>直线与实际距离分析</h1>
+                                    <p><strong>直线距离：</strong>从散点图可以看出，面密度随着距离的增加呈类似指数形式的下降，更验证了文化企业的空间分布和到人民广场的直线距离有关
+                                            以此建立回归模型，由于上述图像特征，故选择幂、对数、指数三种回归模型进行拟合，得到结果如下:                                 
+                                        </p>
+                                        <img src="img/regre1.png" style="max-width: 100%"/> 
+                                        <img src="img/regre2.png" style="max-width: 100%"/> 
+                                        <p>可以看出，指数回归模型与数据的拟合程度最好。因为一方面从曲线图很容易看出指数函数曲线与散点图的整体趋势为吻合；此外在模型摘要数据中，拟合优度值R方和方差分析结果F越大的模型表示拟合效果越好，由此可见，三个模型中指数模型效果最好
+                                        </p><p><strong>模型检验：</strong>       
+                                                在回归模型分析中，F的值是回归方程的显著性检验，表示的是模型中被解释变量与所有解释变量之间的线性关系在总体上是否显著做出推断。若F>Fa(k,n-k-1),则拒绝原假设，即认为列入模型的各个解释变量联合起来对被解释变量有显著影响，反之，则无显著影响。在Fa(k,n-k-1)中，k为自变量个数，n为样本容量。对于我们的指数回归模型，k=2，样本容量n为53070，所以需要查表Fa(2,53067)的值，同时取显著性水平a为0.05（一般取 0.05）： 
+                                                经查表得Fa(2,53067)≈3.00  而指数回归模型的F=981975.900>>Fa(2,53067)  所以可以认为该直线距离和文化产业分布的指数模型在95%的情况下是显著成立的。 
+                                                结合第三章的分析结果，我们认为在影响产业布局的因素中，空间即地域因素是很重要的一 个方面，尤其在产业的数量、密度方面，从以上模型曲线可以看出，越偏向于中心的地域产业数 量越多，密度越大。在第三章中杨浦区中心五角场和嘉定区中心老城区文化产业的高聚集也印证了这一点；而历史文化，及不同地区政府发展规划对产业的影响也不可忽视，这主要体现在产业具体分类或者构成上，例如黄浦区利用名人故居和历史建筑构建的一系列文化产业聚集区。 
+                            
+                                                </p>
+                                    <p><strong>实际距离：</strong>
+                                        从散点图可以看出，面密度随着距离的增加呈类似指数形式的下降，这与直线距离得到的结果类似
+以此建立回归模型，由于上述图像特征，故依旧选择幂、对数、指数三种回归模型进行拟合，得到结果如下
 
-</html>
+                                        </p>
+                                        <img src="img/regre3.png" style="max-width: 100%"/>
+                                        <img src="img/regre4.png" style="max-width: 100%"/>
+                                        <p>可以看出，指数回归模型与数据的拟合程度最好。因为一方面从曲线图很容易看出指数函数曲线与散点图的整体趋势为吻合；此外在模型摘要数据中，拟合优度值R方和方差分析结果F越大的模型表示拟合效果越好，由此可见，三个模型中指数模型效果最好
+                                        </p><p><strong>模型检验：</strong>          
+                                            在回归模型分析中，F的值是回归方程的显著性检验，表示的是模型中被解释变量与所有解释变量之间的线性关系在总体上是否显著做出推断。若F>Fa(k,n-k-1),则拒绝原假设，即认为列入模型的各个解释变量联合起来对被解释变量有显著影响，反之，则无显著影响。在Fa(k,n-k-1)中，k为自变量个数，n为样本容量。对于我们的指数回归模型，k=2，样本容量n为53070，所以需要查表Fa(2,53067)的值，同时取显著性水平a为0.05（一般取 0.05）： 
+                                            经查表得Fa(2,53067)≈3.00  而指数回归模型的F=981975.900>>Fa(2,53067)  所以可以认为该直线距离和文化产业分布的指数模型在95%的情况下是显著成立的。 
+                                            </p>
+                                                <p><strong>结论：</strong>直线距离和实际距离对文化产业空间布局的影响是相似的，即随着距离的增加，企业的空间分布呈指数下降趋势</p>
+                                </div>
+                            </div>
+                      </div>
+                </div>
+            </div>
+        </div>
+        <!-- /.container-fluid-->
+        <!-- /.content-wrapper-->
+        <footer class="sticky-footer">
+            <div class="container">
+                <div class="text-center">
+                    <small>Copyright © GIS小组 2019</small>
+                </div>
+            </div>
+        </footer>
+        <!-- Scroll to Top Button-->
+        <a class="scroll-to-top rounded" href="#page-top">
+            <i class="fa fa-angle-up"></i>
+        </a>
+        <!-- Bootstrap core JavaScript-->
+        <script src="vendor/jquery/jquery.min.js"></script>
+        <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+        <!-- Core plugin JavaScript-->
+        <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
+        <!-- Custom scripts for all pages-->
+        <script src="js/sb-admin.min.js"></script>
+    </div>
+    </body>
+    
+    </html>

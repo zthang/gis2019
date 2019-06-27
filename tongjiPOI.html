@@ -25,7 +25,7 @@
 	<!-- arcgis线上调用 -->
     <link rel="stylesheet" href="https://js.arcgis.com/4.7/esri/css/main.css">
     <script src="https://js.arcgis.com/4.7/"></script>
-	<style>    
+	<style>
 	  #title {
       padding: 15px;
       max-width: 500px;
@@ -49,12 +49,12 @@
 			"esri/core/promiseUtils",
 			"esri/core/watchUtils",
             "dojo/domReady!"
-        ], function(FeatureLayer, Map, MapView, Legend, ImageryLayer, BasemapToggle, 
+        ], function(FeatureLayer, Map, MapView, Legend, ImageryLayer, BasemapToggle,
 					Expand, lang, promiseUtils, watchUtils){
-					
+
 			let totalNumber;
 			let highlightHandle = null;
-			
+
             var map = new Map({
                 basemap: "topo"
             });
@@ -63,9 +63,9 @@
                 map: map,  // Reference to the map object created before the scene
                 zoom: 11,  // Sets zoom level based on level of detail (LOD)
                 center: [121.48, 31.23]  // Sets center point of view using longitude,latitude
-            
+
 			});
-			
+
 			//UI
 			//右上信息栏
 			view.ui.add("title", "top-right");
@@ -74,7 +74,7 @@
 			view: view,
 			style: "classic"
 			}), "bottom-left");
-			
+
 			//底图切换选项
 			// 1 - Create the widget
 			var toggle = new BasemapToggle({
@@ -82,35 +82,107 @@
 				view: view, // view that provides access to the map's 'topo' basemap
 				nextBasemap: "hybrid" // allows for toggling to the 'hybrid' basemap
 			});
-			
+
 			// Add widget to the top right corner of the view
 			view.ui.add(toggle, "top-right");
-			
-			
+
+
 			//图层些
-			var URL1 = "https://10.60.42.201:6442/arcgis/rest/services/Du/tongji/MapServer/1";
+			var URL1 = "http://106.14.222.88:6080/arcgis/rest/services/TongjiCore_LW/MapServer/9";
             var FeatureLayer1 = new
-				FeatureLayer({
-				url: URL1
-				});
-            var URL2 = "https://10.60.42.201:6442/arcgis/rest/services/Du/tongji/MapServer/2";
+            FeatureLayer({
+                url: URL1
+            });
+            var URL2 = "http://106.14.222.88:6080/arcgis/rest/services/TongjiCore_LW/MapServer/10";
             var FeatureLayer2 = new
             FeatureLayer({
                 url: URL2
             });
-            var URL3 = "https://10.60.42.201:6442/arcgis/rest/services/Du/tongji/MapServer/3";
+            var URL3 = "http://106.14.222.88:6080/arcgis/rest/services/TongjiCore_LW/MapServer/11";
             var FeatureLayer3 = new
             FeatureLayer({
                 url: URL3
             });
+            var URL4 = "http://106.14.222.88:6080/arcgis/rest/services/TongjiCore_LW/MapServer/12";
+            var FeatureLayer4 = new
+            FeatureLayer({
+                url: URL4
+            });
+            var URL5 = "http://106.14.222.88:6080/arcgis/rest/services/TongjiCore_LW/MapServer/13";
+            var FeatureLayer5 = new
+            FeatureLayer({
+                url: URL5
+            });
+            var URL6 = "http://106.14.222.88:6080/arcgis/rest/services/TongjiCore_LW/MapServer/14";
+            var FeatureLayer6 = new
+            FeatureLayer({
+                url: URL6
+            });
+            var URL7 = "http://106.14.222.88:6080/arcgis/rest/services/TongjiCore_LW/MapServer/15";
+            var FeatureLayer7 = new
+            FeatureLayer({
+                url: URL7
+            });
+            var URL8 = "http://106.14.222.88:6080/arcgis/rest/services/TongjiCore_LW/MapServer/16";
+            var FeatureLayer8 = new
+            FeatureLayer({
+                url: URL8
+            });
+            var URL9 = "http://106.14.222.88:6080/arcgis/rest/services/TongjiCore_LW/MapServer/17";
+            var FeatureLayer9 = new
+            FeatureLayer({
+                url: URL9
+            });
+            var URL10 = "http://106.14.222.88:6080/arcgis/rest/services/TongjiCore_LW/MapServer/18";
+            var FeatureLayer10 = new
+            FeatureLayer({
+                url: URL10
+            });
+            var URL11 = "http://106.14.222.88:6080/arcgis/rest/services/TongjiCore_LW/MapServer/19";
+            var FeatureLayer11 = new
+            FeatureLayer({
+                url: URL11
+            });
+            var URL12 = "http://106.14.222.88:6080/arcgis/rest/services/TongjiCore_LW/MapServer/20";
+            var FeatureLayer12 = new
+            FeatureLayer({
+                url: URL12
+            });
+            var URL13 = "http://106.14.222.88:6080/arcgis/rest/services/TongjiCore_LW/MapServer/21";
+            var FeatureLayer13 = new
+            FeatureLayer({
+                url: URL13
+            });
+            var URL14 = "http://106.14.222.88:6080/arcgis/rest/services/TongjiCore_LW/MapServer/22";
+            var FeatureLayer14 = new
+            FeatureLayer({
+                url: URL14
+            });
+            var URL15 = "http://106.14.222.88:6080/arcgis/rest/services/TongjiCore_LW/MapServer/23";
+            var FeatureLayer15 = new
+            FeatureLayer({
+                url: URL15
+            });
+
 
 			map.add(FeatureLayer1);
             map.add(FeatureLayer2);
             map.add(FeatureLayer3);
-			
+            map.add(FeatureLayer4);
+            map.add(FeatureLayer5);
+            map.add(FeatureLayer6);
+            map.add(FeatureLayer7);
+            map.add(FeatureLayer8);
+            map.add(FeatureLayer9);
+            map.add(FeatureLayer10);
+            map.add(FeatureLayer11);
+            map.add(FeatureLayer12);
+            map.add(FeatureLayer13);
+            map.add(FeatureLayer14);
+            map.add(FeatureLayer15);
 			//map.add(commute_pressure_ImageryLayer);
 
-		});	
+		});
     </script>
 </head>
 
@@ -134,9 +206,6 @@
                     </li>
                     <li>
                         <a href="heatmap.html">全市热力图</a>
-                    </li>
-                    <li>
-                        <a href="district.html">各区县占比图</a>
                     </li>
                     <li>
                         <a href="POIcharts.html">统计图表</a>
@@ -166,9 +235,7 @@
                     <span class="nav-link-text">空间分布分析</span>
                 </a>
                 <ul class="sidenav-second-level collapse" id="collapse2">
-                    <li>
-                        <a href="circles.html">环线分析</a>
-                    </li>
+                    
                     <li>
                         <a href="distance.html">直线与实际距离分析</a>
                     </li>
@@ -201,7 +268,10 @@
                 </a>
                 <ul class="sidenav-second-level collapse" id="collapseComponents">
                     <li>
-                        <a href="tongjiPOI.html">环同济POI分布与重新布局</a>
+                        <a href="tongjiPOI.html">环同济POI分布</a>
+                    </li>
+                    <li>
+                        <a href="TongjiReachable.html">同济大学辐射范围布局图</a>
                     </li>
                     <li>
                         <a href="tongjicharts.html">统计图表</a>
@@ -234,13 +304,13 @@
 			<li class="breadcrumb-item">
                 <a href="#">环同济经济圈</a>
             </li>
-            <li class="breadcrumb-item active">环同济POI分布与重新布局</li>
+            <li class="breadcrumb-item active">环同济POI分布</li>
         </ol>
         <div class="row">
             <div class="col-12" style="height: 650px;">
                 <div id="viewDiv" style="width: 100%; height: 100%;"></div>
 				  <div id="title" class="esri-widget">
-					<span id="totalNumber">环同济经济圈</span>的文创POI分布与重新布局设计。
+					<span id="totalNumber">环同济经济圈</span>的文创POI分布。
 				  </div>
 			</div>
         </div>
@@ -250,7 +320,7 @@
     <footer class="sticky-footer">
         <div class="container">
             <div class="text-center">
-                <small>Copyright © GIS小组 2018</small>
+                <small>Copyright © GIS小组 2019</small>
             </div>
         </div>
     </footer>
